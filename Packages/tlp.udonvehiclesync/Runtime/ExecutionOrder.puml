@@ -1,0 +1,42 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+'VRChat TLP structure
+control UDON order -10000
+control DirectInput order -1000
+control Default order 0
+control VehicleMotion order 1000
+control PlayerMotion order 2000
+control Weapons order 3000
+control UI order 10000
+control Audio order 11000
+
+rnote over DirectInput: -1000 - 0
+/ rnote over Default: 0
+/ rnote over VehicleMotion: 1000 - 2000
+/ rnote over PlayerMotion: 2000 - 3000
+/ rnote over Weapons: 3000 - 4000
+/ rnote over UI: 10000 - 11000
+/ rnote over Audio: 11000 - 12000
+
+'UdonVehicleSync
+'-------------
+group Udon Vehicle Sync
+
+    'Order
+    '-----
+    'VehicleMotion
+    participant TestPuppet order 1500
+    
+    'PlayerMotion
+    participant PlayerNetworkTransform order 2750
+
+    'Comments
+    '--------
+    rnote over TestPuppet: 1500
+    / rnote over PlayerNetworkTransform: 2750
+end
+
+@enduml
