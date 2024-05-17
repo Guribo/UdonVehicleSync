@@ -78,6 +78,16 @@ The used pattern MAJOR.MINOR.PATCH indicates:
 
 All notable changes to this project will be documented in this file.
 
+### [2.1.0] - 2024-05-17
+
+#### 🚀 Features
+
+- *(PredictingSync)* Add OnRespawn event to listen to, add to prefab as well
+
+#### ⚙️ Miscellaneous Tasks
+
+- *(Prefabs)* Tweak default sender settings to be more likely to send updates when moving slowly when dynamic send rate is enabled, disable debug trails by default
+
 ### [2.0.1] - 2024-05-16
 
 #### 🐛 Bug Fixes

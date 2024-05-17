@@ -248,6 +248,11 @@ PrefabInstance:
       objectReference: {fileID: 9194332482171141020}
     - target: {fileID: 6766677754684775388, guid: 75c09e92471f67c4dadeccc61aa33710,
         type: 3}
+      propertyPath: DebugTrailsEnabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6766677754684775388, guid: 75c09e92471f67c4dadeccc61aa33710,
+        type: 3}
       propertyPath: serializationData.Prefab
       value: 
       objectReference: {fileID: 6766677754684775388, guid: 75c09e92471f67c4dadeccc61aa33710,
@@ -299,10 +304,30 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1196994485097493220, guid: 170dbafe1a5c0fd4a89b8a32a9526a82,
         type: 3}
+      propertyPath: MaxSendInterval
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1196994485097493220, guid: 170dbafe1a5c0fd4a89b8a32a9526a82,
+        type: 3}
+      propertyPath: PositionThreshold
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1196994485097493220, guid: 170dbafe1a5c0fd4a89b8a32a9526a82,
+        type: 3}
+      propertyPath: RotationThreshold
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1196994485097493220, guid: 170dbafe1a5c0fd4a89b8a32a9526a82,
+        type: 3}
       propertyPath: serializationData.Prefab
       value: 
       objectReference: {fileID: 1196994485097493220, guid: 170dbafe1a5c0fd4a89b8a32a9526a82,
         type: 3}
+    - target: {fileID: 1196994485097493220, guid: 170dbafe1a5c0fd4a89b8a32a9526a82,
+        type: 3}
+      propertyPath: VelocityDirectionThreshold
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1601085007169379712, guid: 170dbafe1a5c0fd4a89b8a32a9526a82,
         type: 3}
       propertyPath: serializedProgramAsset
@@ -497,6 +522,12 @@ PrefabInstance:
       propertyPath: m_MinVertexDistance
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9101191147788666938, guid: 170dbafe1a5c0fd4a89b8a32a9526a82,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 9101191147788666938, guid: 170dbafe1a5c0fd4a89b8a32a9526a82,
+        type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:

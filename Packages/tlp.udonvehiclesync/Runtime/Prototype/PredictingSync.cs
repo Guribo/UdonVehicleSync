@@ -2,6 +2,7 @@
 using JetBrains.Annotations;
 using TLP.UdonUtils;
 using TLP.UdonUtils.Common;
+using TLP.UdonUtils.Events;
 using TLP.UdonUtils.Sync;
 using UdonSharp;
 using UnityEngine;
@@ -28,6 +29,8 @@ namespace TLP.UdonVehicleSync.TLP.UdonVehicleSync.Runtime.Prototype
 
         [SerializeField]
         internal PositionSendController PositionSendController;
+
+        public UdonEvent OnRespawnEvent;
         #endregion
 
         #region Constants
@@ -159,12 +162,49 @@ namespace TLP.UdonVehicleSync.TLP.UdonVehicleSync.Runtime.Prototype
             LocallyTeleportToLastKnownPosition();
             return true;
         }
+
+        /// <summary>
+        /// Respawns the <see cref="Target"/> to its initial world position and rotation
+        /// </summary>
+        /// <param name="raiseRespawnEvent">if true <see cref="OnRespawnEvent"/> is raised after
+        /// moving to the spawn location</param>
+        /// <returns>true on success, false if not owner or other errors occurred</returns>
+        public bool Respawn(bool raiseRespawnEvent = true) {
+            #region TLP_DEBUG
+#if TLP_DEBUG
+            DebugLog(nameof(Respawn));
+#endif
+            #endregion
+
+            _targetRigidBody.velocity = Vector3.zero;
+            _targetRigidBody.angularVelocity = Vector3.zero;
+            if (!TeleportTo(SpawnPosition + Vector3.up * 0.05f, SpawnRotation)) {
+                return false;
+            }
+
+            if (raiseRespawnEvent && !OnRespawnEvent.Raise(this)) {
+                Error($"Failed to raise {nameof(OnRespawnEvent)}");
+                return false;
+            }
+
+            return true;
+        }
         #endregion
 
         #region Overrides
         #region TLP Base Behaviour
         protected override bool SetupAndValidate() {
             if (!base.SetupAndValidate()) {
+                return false;
+            }
+
+            if (!Utilities.IsValid(OnRespawnEvent)) {
+                Error($"{nameof(OnRespawnEvent)} is not set");
+                return false;
+            }
+
+            if (OnRespawnEvent.ListenerMethod != "OnRespawn") {
+                Error($"{nameof(OnRespawnEvent)}.{nameof(OnRespawnEvent.ListenerMethod)} is not set to 'OnRespawn'");
                 return false;
             }
 
@@ -234,7 +274,7 @@ namespace TLP.UdonVehicleSync.TLP.UdonVehicleSync.Runtime.Prototype
 
         public void LateUpdate() {
             if (Networking.IsOwner(gameObject) && Target.position.y < RespawnHeight) {
-                TeleportTo(SpawnPosition, SpawnRotation);
+                Respawn();
             }
         }
         #endregion
@@ -561,14 +601,19 @@ namespace TLP.UdonVehicleSync.TLP.UdonVehicleSync.Runtime.Prototype
                     out var oldVelocity,
                     out var oldRotation);
 
-            double rawBlend = Mathf.Clamp(
-                    (float)((NetworkTime.TimeAsDouble() - ReceiveTime) / ErrorCorrectionDuration),
-                    0,
-                    1);
-            float blend = ErrorCorrectionSoftness == 0f
-                    ? (float)rawBlend
-                    : CubicInterpolationFactor(
-                            (float)Math.Pow(rawBlend, Mathf.Clamp01(ErrorCorrectionSoftness)));
+            double rawBlend = 1.0;
+            if (ErrorCorrectionDuration > 0f) {
+                rawBlend = Mathf.Clamp(
+                        (float)((NetworkTime.TimeAsDouble() - ReceiveTime) / ErrorCorrectionDuration),
+                        0,
+                        1);
+            }
+
+            float blend = (float)rawBlend;
+            if (ErrorCorrectionSoftness > 0f) {
+                blend = CubicInterpolationFactor(
+                        (float)Math.Pow(rawBlend, Mathf.Min(1.0f, ErrorCorrectionSoftness)));
+            }
 
             PreviousWorkingVelocity = Vector3.Lerp(oldVelocity, newVelocity, blend);
             PreviousWorkingAngularVelocityRadians = Vector3.Lerp(
