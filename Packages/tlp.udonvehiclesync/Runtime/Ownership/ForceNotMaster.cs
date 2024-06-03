@@ -1,5 +1,5 @@
-using TLP.UdonUtils;
-using TLP.UdonUtils.Extensions;
+using TLP.UdonUtils.Runtime;
+using TLP.UdonUtils.Runtime.Extensions;
 using UdonSharp;
 using VRC.SDKBase;
 
@@ -18,7 +18,6 @@ namespace TLP.UdonVehicleSync.Runtime.Ownership
         }
 
         #region Internal
-
         /// <summary>
         /// If currently master the local player will find the first non-master player and transfers the ownership.
         /// No-op in single player-mode.

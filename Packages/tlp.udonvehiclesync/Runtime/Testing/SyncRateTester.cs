@@ -1,5 +1,5 @@
-﻿using TLP.UdonUtils;
-using TLP.UdonUtils.Extensions;
+﻿using TLP.UdonUtils.Runtime;
+using TLP.UdonUtils.Runtime.Extensions;
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
@@ -13,26 +13,21 @@ namespace TLP.UdonVehicleSync.Runtime.Testing
         [UdonSynced]
         public int FrameCount;
 
-        public void Update()
-        {
-            if (Networking.IsOwner(gameObject))
-            {
+        public void Update() {
+            if (Networking.IsOwner(gameObject)) {
                 FrameCount = Time.frameCount;
                 MarkNetworkDirty();
                 RequestSerialization();
             }
         }
 
-        public override void OnDeserialization(DeserializationResult deserializationResult)
-        {
+        public override void OnDeserialization(DeserializationResult deserializationResult) {
             #region TLP_DEBUG
-
 #if TLP_DEBUG
             DebugLog(
-                $"{nameof(OnDeserialization)} received frame {FrameCount}, latency = {deserializationResult.Latency()} seconds"
+                    $"{nameof(OnDeserialization)} received frame {FrameCount}, latency = {deserializationResult.Latency()} seconds"
             );
 #endif
-
             #endregion
         }
     }

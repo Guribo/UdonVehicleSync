@@ -1,10 +1,10 @@
 using JetBrains.Annotations;
-using TLP.UdonUtils;
-using TLP.UdonUtils.Extensions;
-using TLP.UdonUtils.Physics;
-using TLP.UdonUtils.Sources;
-using TLP.UdonUtils.Sources.Time;
-using TLP.UdonUtils.Sync;
+using TLP.UdonUtils.Runtime;
+using TLP.UdonUtils.Runtime.Extensions;
+using TLP.UdonUtils.Runtime.Physics;
+using TLP.UdonUtils.Runtime.Sources;
+using TLP.UdonUtils.Runtime.Sources.Time;
+using TLP.UdonUtils.Runtime.Sync;
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;

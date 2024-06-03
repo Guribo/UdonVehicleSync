@@ -1,5 +1,5 @@
-using TLP.UdonUtils;
-using TLP.UdonUtils.Extensions;
+using TLP.UdonUtils.Runtime;
+using TLP.UdonUtils.Runtime.Extensions;
 using UdonSharp;
 using VRC.SDKBase;
 

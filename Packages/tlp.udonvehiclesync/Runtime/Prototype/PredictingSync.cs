@@ -1,12 +1,11 @@
 ﻿using System;
 using JetBrains.Annotations;
-using TLP.UdonUtils;
-using TLP.UdonUtils.Common;
-using TLP.UdonUtils.Events;
-using TLP.UdonUtils.Sync;
+using TLP.UdonUtils.Runtime;
+using TLP.UdonUtils.Runtime.Common;
+using TLP.UdonUtils.Runtime.Events;
+using TLP.UdonUtils.Runtime.Sync;
 using UdonSharp;
 using UnityEngine;
-using UnityEngine.Serialization;
 using VRC.SDKBase;
 using VRC.Udon.Common;
 

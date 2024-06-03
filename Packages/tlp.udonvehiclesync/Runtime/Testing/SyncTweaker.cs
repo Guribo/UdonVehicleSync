@@ -1,6 +1,6 @@
 ﻿using JetBrains.Annotations;
-using TLP.UdonUtils.DesignPatterns.MVC;
-using TLP.UdonUtils.Events;
+using TLP.UdonUtils.Runtime.DesignPatterns.MVC;
+using TLP.UdonUtils.Runtime.Events;
 using TMPro;
 using UdonSharp;
 using UnityEngine;

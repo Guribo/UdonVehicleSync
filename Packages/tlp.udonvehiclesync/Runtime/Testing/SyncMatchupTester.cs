@@ -1,6 +1,6 @@
 ﻿using JetBrains.Annotations;
-using TLP.UdonUtils;
-using TLP.UdonUtils.Sources;
+using TLP.UdonUtils.Runtime;
+using TLP.UdonUtils.Runtime.Sources;
 using TLP.UdonVehicleSync.TLP.UdonVehicleSync.Runtime.Prototype;
 using UdonSharp;
 using UnityEngine;
@@ -30,53 +30,46 @@ namespace TLP.UdonVehicleSync.Runtime.Testing
         [UdonSynced]
         public double StartTime;
 
-        public void LateUpdate()
-        {
-            if (Input.GetKeyDown(Code))
-            {
+        public void LateUpdate() {
+            if (Input.GetKeyDown(Code)) {
                 Trigger();
             }
 
-            if (Input.GetKeyDown(KeyCode.U))
-            {
+            if (Input.GetKeyDown(KeyCode.U)) {
                 _index = Mathf.Min(Velocities.Length - 1, _index + 1);
                 DebugLog($"New Speed = {Velocities[_index]} m/s");
             }
 
-            if (Input.GetKeyDown(KeyCode.J))
-            {
+            if (Input.GetKeyDown(KeyCode.J)) {
                 _index = Mathf.Max(0, _index - 1);
                 DebugLog($"New Speed = {Velocities[_index]} m/s");
             }
 
-            if (Input.GetKeyDown(KeyCode.T))
-            {
+            if (Input.GetKeyDown(KeyCode.T)) {
                 Networking.SetOwner(Networking.LocalPlayer, gameObject);
                 StartTime = NetworkTime.TimeAsDouble() + 3f;
                 RequestSerialization();
                 SendCustomEventDelayedSeconds(
-                    nameof(Trigger),
-                    (float)(StartTime - NetworkTime.TimeAsDouble()),
-                    EventTiming.LateUpdate
+                        nameof(Trigger),
+                        (float)(StartTime - NetworkTime.TimeAsDouble()),
+                        EventTiming.LateUpdate
                 );
             }
         }
 
-        public override void OnDeserialization(DeserializationResult deserializationResult)
-        {
+        public override void OnDeserialization(DeserializationResult deserializationResult) {
             base.OnDeserialization(deserializationResult);
             SendCustomEventDelayedSeconds(
-                nameof(Trigger),
-                (float)(StartTime - NetworkTime.TimeAsDouble()),
-                EventTiming.LateUpdate
+                    nameof(Trigger),
+                    (float)(StartTime - NetworkTime.TimeAsDouble()),
+                    EventTiming.LateUpdate
             );
         }
 
-        public void Trigger()
-        {
+        public void Trigger() {
             float timeAfterTrigger =
                     (float)(NetworkTime.TimeAsDouble() - StartTime) + (Time.fixedTime - Time.time) +
-                Time.fixedDeltaTime;
+                    Time.fixedDeltaTime;
             var ownTransform = transform;
             var transformForward = ownTransform.forward;
             Target.transform.position = ownTransform.position +
