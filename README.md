@@ -32,9 +32,9 @@ A predictive, smooth synchronization implementation for non-kinematic RigidBodie
 
 ## Installation
 
-1. Install VRChat World SDK 3.6
-2. Install CyanPlayerObjectPool: https://cyanlaser.github.io/CyanPlayerObjectPool/
-3. Install TLP UdonVehicleSync: https://guribo.github.io/TLP/
+1. Install/Add VRChat World SDK 3.7 to your project
+2. Install/Add CyanPlayerObjectPool to your project: https://cyanlaser.github.io/CyanPlayerObjectPool/
+3. Install/Add TLP UdonVehicleSync to your project: https://guribo.github.io/TLP/
 
 ## Setup
 
@@ -77,6 +77,12 @@ The used pattern MAJOR.MINOR.PATCH indicates:
 ## Changelog
 
 All notable changes to this project will be documented in this file.
+
+### [2.2.0] - 2024-09-14
+
+#### 🚀 Features
+
+- Migrate to UdonUtils 9.0 and VRC SDK 3.7
 
 ### [2.1.1] - 2024-06-03
 
