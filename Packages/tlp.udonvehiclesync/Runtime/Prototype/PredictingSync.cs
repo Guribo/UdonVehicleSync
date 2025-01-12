@@ -3,6 +3,7 @@ using JetBrains.Annotations;
 using TLP.UdonUtils.Runtime;
 using TLP.UdonUtils.Runtime.Common;
 using TLP.UdonUtils.Runtime.Events;
+using TLP.UdonUtils.Runtime.Sources.Time;
 using TLP.UdonUtils.Runtime.Sync;
 using UdonSharp;
 using UnityEngine;
@@ -13,14 +14,14 @@ namespace TLP.UdonVehicleSync.TLP.UdonVehicleSync.Runtime.Prototype
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     [DefaultExecutionOrder(ExecutionOrder)]
+    [TlpDefaultExecutionOrder(typeof(PredictingSync), ExecutionOrder)]
     public class PredictingSync : TlpAccurateSyncBehaviourUpdate
     {
         #region ExecutionOrder
-        protected override int ExecutionOrderReadOnly => ExecutionOrder;
+        public override int ExecutionOrderReadOnly => ExecutionOrder;
 
-        // make sure this script updates after the sender
         [PublicAPI]
-        public new const int ExecutionOrder = TlpExecutionOrder.VehicleMotionStart - 1;
+        public new const int ExecutionOrder = TlpAccurateSyncBehaviourUpdate.ExecutionOrder + 4;
         #endregion
 
         #region Dependencies
@@ -193,10 +194,6 @@ namespace TLP.UdonVehicleSync.TLP.UdonVehicleSync.Runtime.Prototype
         #region Overrides
         #region TLP Base Behaviour
         protected override bool SetupAndValidate() {
-            if (!base.SetupAndValidate()) {
-                return false;
-            }
-
             if (!Utilities.IsValid(OnRespawnEvent)) {
                 Error($"{nameof(OnRespawnEvent)} is not set");
                 return false;
@@ -208,8 +205,13 @@ namespace TLP.UdonVehicleSync.TLP.UdonVehicleSync.Runtime.Prototype
             }
 
             if (!Utilities.IsValid(NetworkTime)) {
-                Error($"{nameof(NetworkTime)} is not set");
-                return false;
+                Warn(
+                        $"{nameof(SetupAndValidate)}: {nameof(NetworkTime)} is not set, falling back to 'TLP_NetworkTime'");
+                NetworkTime = TlpNetworkTime.GetInstance();
+                if (!Utilities.IsValid(NetworkTime)) {
+                    Error($"{nameof(SetupAndValidate)}: '{nameof(TlpNetworkTime)}' not found");
+                    return false;
+                }
             }
 
             if (!Utilities.IsValid(Target)) {
@@ -268,7 +270,7 @@ namespace TLP.UdonVehicleSync.TLP.UdonVehicleSync.Runtime.Prototype
                     $"set to {MaxDePenetrationVelocity} m/s");
             _targetRigidBody.maxDepenetrationVelocity = MaxDePenetrationVelocity;
 
-            return true;
+            return base.SetupAndValidate();
         }
 
         public void LateUpdate() {

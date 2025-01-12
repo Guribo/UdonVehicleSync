@@ -1,12 +1,22 @@
-﻿using TLP.UdonUtils.Runtime.DesignPatterns.MVC;
+﻿using JetBrains.Annotations;
+using TLP.UdonUtils.Runtime.DesignPatterns.MVC;
 using UdonSharp;
+using UnityEngine;
 using VRC.SDKBase;
 
 namespace TLP.UdonVehicleSync.Runtime.Testing
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Any)]
+    [DefaultExecutionOrder(ExecutionOrder)]
+    [TlpDefaultExecutionOrder(typeof(SyncTweakerController), ExecutionOrder)]
     public class SyncTweakerController : Controller
     {
+        #region ExecutionOrder
+        public override int ExecutionOrderReadOnly => ExecutionOrder;
+
+        [PublicAPI]
+        public new const int ExecutionOrder = Controller.ExecutionOrder + 20;
+#endregion
         private SyncTweaker _ui;
         private SyncTweakerModel _model;
 

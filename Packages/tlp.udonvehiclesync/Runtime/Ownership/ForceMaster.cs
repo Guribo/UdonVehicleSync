@@ -1,6 +1,8 @@
+using JetBrains.Annotations;
 using TLP.UdonUtils.Runtime;
 using TLP.UdonUtils.Runtime.Extensions;
 using UdonSharp;
+using UnityEngine;
 using VRC.SDKBase;
 
 namespace TLP.UdonVehicleSync.Runtime.Ownership
@@ -11,8 +13,16 @@ namespace TLP.UdonVehicleSync.Runtime.Ownership
     ///       Only the current master player transfers ownership.
     /// </summary>
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
+    [DefaultExecutionOrder(ExecutionOrder)]
+    [TlpDefaultExecutionOrder(typeof(ForceMaster), ExecutionOrder)]
     public class ForceMaster : TlpBaseBehaviour
     {
+        #region ExecutionOrder
+        public override int ExecutionOrderReadOnly => ExecutionOrder;
+
+        [PublicAPI]
+        public new const int ExecutionOrder = ForceNotMaster.ExecutionOrder + 1;
+#endregion
         public void Update() {
             MasterTakeOwnership();
         }

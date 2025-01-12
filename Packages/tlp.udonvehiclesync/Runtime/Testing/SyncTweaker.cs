@@ -10,8 +10,16 @@ using UnityEngine.UI;
 namespace TLP.UdonVehicleSync.Runtime.Testing
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Any)]
+    [DefaultExecutionOrder(ExecutionOrder)]
+    [TlpDefaultExecutionOrder(typeof(SyncTweaker), ExecutionOrder)]
     public class SyncTweaker : View
     {
+        #region ExecutionOrder
+        public override int ExecutionOrderReadOnly => ExecutionOrder;
+
+        [PublicAPI]
+        public new const int ExecutionOrder = View.ExecutionOrder + 20;
+        #endregion
         [FormerlySerializedAs("UiChanged")]
         [SerializeField]
         private UiEvent UiChangedEvent;
@@ -78,8 +86,8 @@ namespace TLP.UdonVehicleSync.Runtime.Testing
                 return;
             }
 
-            if (!Initialized) {
-                Warn("Not yet initialized");
+            if (!HasStartedOk) {
+                Error($"{nameof(OnUiChanged)}: Not initialized");
                 return;
             }
 

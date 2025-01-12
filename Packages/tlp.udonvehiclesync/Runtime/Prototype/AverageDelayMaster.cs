@@ -1,7 +1,8 @@
-﻿using TLP.UdonUtils.Runtime;
+﻿using JetBrains.Annotations;
+using TLP.UdonUtils.Runtime;
+using TLP.UdonVehicleSync.Runtime.Ownership;
 using UdonSharp;
 using UnityEngine;
-using UnityEngine.UI;
 using VRC.SDKBase;
 using VRC.Udon;
 using VRC.Udon.Common;
@@ -10,8 +11,17 @@ using VRC.Udon.Common.Enums;
 namespace TLP.UdonVehicleSync.TLP.UdonVehicleSync.Runtime.Prototype
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
+    [DefaultExecutionOrder(ExecutionOrder)]
+    [TlpDefaultExecutionOrder(typeof(AverageDelayMaster), ExecutionOrder)]
     public class AverageDelayMaster : TlpBaseBehaviour
     {
+        #region ExecutionOrder
+        public override int ExecutionOrderReadOnly => ExecutionOrder;
+
+        [PublicAPI]
+        public new const int ExecutionOrder = ForceMaster.ExecutionOrder + 1;
+        #endregion
+
         public float syncInterVal = 0.33f;
 
         [UdonSynced]
@@ -34,14 +44,18 @@ namespace TLP.UdonVehicleSync.TLP.UdonVehicleSync.Runtime.Prototype
 
         private int m_NextPlayer;
 
-        public Text deltaToPlayer;
+        public UnityEngine.UI.Text deltaToPlayer;
 
         private bool m_UpdateQueued;
         private bool m_PlayerSwitchQueued;
 
-        public override void Start() {
-            base.Start();
+        protected override bool SetupAndValidate() {
+            if (!base.SetupAndValidate()) {
+                return false;
+            }
+
             EnqueueUpdateOwnerServerTime();
+            return true;
         }
 
         public void UpdateOwnerServerTime() {

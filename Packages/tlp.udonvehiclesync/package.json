@@ -1,7 +1,7 @@
 {
   "name": "tlp.udonvehiclesync",
   "displayName": "TLP UdonVehicleSync",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Experimental, smooth, predictive synchronization for RigidBody-based objects/vehicles.",
   "gitDependencies": {},
   "legacyFolders": {},
@@ -10,7 +10,7 @@
     "url": "https://github.com/Guribo"
   },
   "vpmDependencies": {
-    "tlp.udonutils": "9.0.x"
+    "tlp.udonutils": "^11.3.0"
   },
   "unity": "2022.3"
 }

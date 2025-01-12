@@ -16,10 +16,10 @@ namespace TLP.UdonVehicleSync.TLP.UdonVehicleSync.Runtime.Prototype
     public class PositionSendController : TlpBaseBehaviour
     {
         #region ExecutionOrder
-        protected override int ExecutionOrderReadOnly => ExecutionOrder;
+        public override int ExecutionOrderReadOnly => ExecutionOrder;
 
         [PublicAPI]
-        public new const int ExecutionOrder = VelocityProvider.ExecutionOrder + 1;
+        public new const int ExecutionOrder = PostLateUpdateVelocityProvider.ExecutionOrder + 1;
         #endregion
 
         #region Dependencies
@@ -144,8 +144,12 @@ namespace TLP.UdonVehicleSync.TLP.UdonVehicleSync.Runtime.Prototype
             }
 
             if (!Utilities.IsValid(NetworkTime)) {
-                Error($"{nameof(NetworkTime)} is not set");
-                return false;
+                Warn($"{nameof(SetupAndValidate)}: {nameof(NetworkTime)} is not set, falling back to 'TLP_NetworkTime'");
+                NetworkTime = TlpNetworkTime.GetInstance();
+                if (!Utilities.IsValid(NetworkTime)) {
+                    Error($"{nameof(SetupAndValidate)}: '{nameof(TlpNetworkTime)}' not found");
+                    return false;
+                }
             }
 
             if (!Utilities.IsValid(GameTime)) {

@@ -1,4 +1,5 @@
-﻿using TLP.UdonUtils.Runtime.DesignPatterns.MVC;
+﻿using JetBrains.Annotations;
+using TLP.UdonUtils.Runtime.DesignPatterns.MVC;
 using TLP.UdonUtils.Runtime.Sync;
 using TLP.UdonVehicleSync.TLP.UdonVehicleSync.Runtime.Prototype;
 using UdonSharp;
@@ -8,8 +9,17 @@ using VRC.Udon.Common;
 namespace TLP.UdonVehicleSync.Runtime.Testing
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
+    [DefaultExecutionOrder(ExecutionOrder)]
+    [TlpDefaultExecutionOrder(typeof(SyncTweakerModel), ExecutionOrder)]
     public class SyncTweakerModel : Model
     {
+        #region ExecutionOrder
+        public override int ExecutionOrderReadOnly => ExecutionOrder;
+
+        [PublicAPI]
+        public new const int ExecutionOrder = Model.ExecutionOrder + 20;
+        #endregion
+
         #region Constants
         private const float MinimumSendRate = 1f;
         private const float MaximumSendRate = 20f;
